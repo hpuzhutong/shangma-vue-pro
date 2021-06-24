@@ -1,0 +1,14 @@
+server:
+  port: 9999
+
+logging:
+  level:
+    com:
+      zhu:
+        sm: debug
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shangma?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123
