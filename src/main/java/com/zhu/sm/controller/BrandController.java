@@ -2,7 +2,10 @@ package com.zhu.sm.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.zhu.sm.common.http.AxiosResult;
+import com.zhu.sm.common.http.AxiosStatus;
 import com.zhu.sm.common.page.PageBean;
+import com.zhu.sm.common.valid.group.AddGroup;
+import com.zhu.sm.common.valid.group.UpdateGroup;
 import com.zhu.sm.controller.base.BaseController;
 import com.zhu.sm.dto.BrandDTO;
 import com.zhu.sm.entity.Brand;
@@ -10,9 +13,12 @@ import com.zhu.sm.query.BrandQuery;
 import com.zhu.sm.service.BrandService;
 import com.zhu.sm.transfer.BrandTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -43,7 +49,7 @@ public class BrandController extends BaseController {
 //    public AxiosResult<List<BrandDTO>> findAll() {
 //        return AxiosResult.success(brandService.findAll());
 //    }
-//
+
     @GetMapping("{id}")
     public AxiosResult<BrandDTO> findById(@PathVariable long id) {
         Brand brand = brandService.findById(id);
@@ -51,9 +57,7 @@ public class BrandController extends BaseController {
     }
 
     @PostMapping
-    public AxiosResult<Void> addBrand(@RequestBody Brand brand) {
-//        brand.setCreateBy(1);
-//        brand.setCreateTime(LocalDateTime.now());
+    public AxiosResult addBrand(@Validated(AddGroup.class) @RequestBody Brand brand) {
         return toAxios(brandService.add(brand));
     }
 
@@ -68,7 +72,7 @@ public class BrandController extends BaseController {
     }
 
     @PutMapping
-    public AxiosResult<Void> updateById(@RequestBody Brand brand){
+    public AxiosResult<Void> updateById(@Validated(UpdateGroup.class) @RequestBody Brand brand){
         return toAxios(brandService.update(brand));
     }
 

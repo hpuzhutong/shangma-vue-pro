@@ -10,10 +10,10 @@ import com.zhu.sm.common.http.AxiosResult;
  */
 public class BaseController {
 
-    public AxiosResult<Void> toAxios(int row){
-        if (row>0){
+    public AxiosResult<Void> toAxios(int row) {
+        if (row > 0) {
             return AxiosResult.success();
-        }else {
+        } else {
             return AxiosResult.error();
         }
     }

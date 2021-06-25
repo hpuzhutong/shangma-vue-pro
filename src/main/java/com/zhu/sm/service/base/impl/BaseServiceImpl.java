@@ -2,11 +2,14 @@ package com.zhu.sm.service.base.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.zhu.sm.entity.base.BaseEntity;
 import com.zhu.sm.mapper.base.MyMapper;
 import com.zhu.sm.service.base.BaseService;
+import com.zhu.sm.util.ReflectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,11 +36,14 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public int add(T t) {
+        //使用反射
+        ReflectionUtils.invokeMethod(t,"setData",null,null);
         return myMapper.insert(t);
     }
 
     @Override
     public int update(T t) {
+        ReflectionUtils.invokeMethod(t,"setData",null,null);
         return myMapper.updateById(t);
     }
 

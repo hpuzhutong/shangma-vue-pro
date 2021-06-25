@@ -1,5 +1,6 @@
 package com.zhu.sm.transfer.base;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.ParameterizedType;
@@ -12,6 +13,7 @@ import java.util.List;
  * @className: BaseTrandsfer
  * @description:
  */
+@Slf4j
 public class BaseTransfer<DTO, Entity> {
 
     /**
@@ -24,8 +26,9 @@ public class BaseTransfer<DTO, Entity> {
             BeanUtils.copyProperties(entity, o);
             return o;
         } catch (Exception e) {
-            return null;
+            log.error("实体类转换DTO错误"+e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -50,6 +53,7 @@ public class BaseTransfer<DTO, Entity> {
             BeanUtils.copyProperties(dto, entity);
             return entity;
         } catch (Exception e) {
+            log.error("DTO转换实体类错误"+e.getMessage());
         }
         return null;
     }

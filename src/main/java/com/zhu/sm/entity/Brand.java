@@ -1,9 +1,14 @@
 package com.zhu.sm.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.zhu.sm.common.valid.group.AddGroup;
+import com.zhu.sm.common.valid.group.UpdateGroup;
 import com.zhu.sm.entity.base.BaseEntity;
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -24,9 +29,14 @@ import java.time.LocalDateTime;
 @TableName(value = "t_brand")
 public class Brand  extends BaseEntity {
 
+    @NotBlank(message = "品牌名称不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private String brandName;
+    @NotBlank(message = "品牌网址不能为空",groups = {AddGroup.class, UpdateGroup.class})
+    @URL(message = "必须是可访问的网址")
     private String brandSite;
+    @NotBlank(message = "品牌描述不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private String brandDesc;
+    @NotBlank(message = "品牌图标不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private String brandLogo;
 
 }

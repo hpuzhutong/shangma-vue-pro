@@ -1,7 +1,6 @@
 package com.zhu.sm.mapper.base;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @anthor: HandSome_ZTon
