@@ -6,7 +6,10 @@ import com.github.pagehelper.PageInfo;
 import com.zhu.sm.common.page.PageBean;
 import com.zhu.sm.dto.AdminDTO;
 import com.zhu.sm.entity.Admin;
+import com.zhu.sm.entity.AdminRole;
+import com.zhu.sm.entity.Role;
 import com.zhu.sm.mapper.AdminMapper;
+import com.zhu.sm.mapper.AdminRoleMapper;
 import com.zhu.sm.query.AdminQuery;
 import com.zhu.sm.service.AdminService;
 import com.zhu.sm.service.base.impl.BaseServiceImpl;
@@ -14,10 +17,12 @@ import com.zhu.sm.transfer.AdminTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @anthor: HandSome_ZTon
@@ -41,6 +46,9 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
     @Autowired
     private AdminTransfer adminTransfer;
 
+    @Autowired
+    private AdminRoleMapper adminRoleMapper;
+
     @Override
     public PageBean<AdminDTO> searchPage(AdminQuery adminQuery) {
         LambdaQueryWrapper<Admin> lqw = new LambdaQueryWrapper<>();
@@ -60,6 +68,8 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
             lqw.between(Admin::getCreateTime, adminQuery.getStartTime(), adminQuery.getEndTime());
         }
 
+        //排序
+        lqw.orderByDesc(Admin::getId);
         List<Admin> admins = adminMapper.selectList(lqw);
         PageInfo<Admin> pageInfo = new PageInfo<>(admins);
         List<AdminDTO> adminDTOS = adminTransfer.toDTO(admins);
@@ -84,5 +94,51 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
         lambdaQueryWrapper.eq(Admin::getAdminAccount, admin.getAdminAccount()).or().eq(Admin::getAdminEmail, admin.getAdminEmail()).or().eq(Admin::getAdminPhone, admin.getAdminPhone());
         Integer integer = adminMapper.selectCount(lambdaQueryWrapper);
         return integer > 0;
+    }
+
+
+    @Override
+    public int addAdminAndAdminRole(Admin admin) {
+        this.add(admin);
+        if (!CollectionUtils.isEmpty(admin.getRoleIds())) {
+            admin.getRoleIds().forEach(roleId -> adminRoleMapper.insert(new AdminRole(roleId, admin.getId())));
+        }
+        return 1;
+    }
+
+
+    @Override
+    public AdminDTO getAdminAndRoleByAdminId(Long id) {
+        Admin admin = this.findById(id);
+        AdminDTO adminDTO = adminTransfer.toDTO(admin);
+        List<AdminRole> adminRoles = adminRoleMapper.selectList(new QueryWrapper<AdminRole>().lambda().eq(AdminRole::getAdminId, id));
+        List<Long> roleIds = adminRoles.stream().map(AdminRole::getRoleId).collect(Collectors.toList());
+        adminDTO.setRoleIds(roleIds);
+        return adminDTO;
+    }
+
+    @Override
+    public int updateAdminAndRole(Admin admin) {
+        //删除员工所有的信息以及角色
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().lambda().eq(AdminRole::getAdminId, admin.getId()));
+        //添加角色以及信息
+        if (!CollectionUtils.isEmpty(admin.getRoleIds())) {
+            admin.getRoleIds().forEach(roleId -> adminRoleMapper.insert(new AdminRole(roleId, admin.getId())));
+        }
+        return this.update(admin);
+    }
+
+    @Override
+    public int deleteAdminAndRoleByAdminId(Long id) {
+        //删除员工所有的信息以及角色
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().lambda().eq(AdminRole::getAdminId, id));
+        return this.deleteById(id);
+    }
+
+    @Override
+    public int batchDeleteAdminAndRolesByAdminIds(List<Long> ids) {
+        //删除员工所有的信息以及角色
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().lambda().in(AdminRole::getAdminId,ids));
+        return this.batchDelByIds(ids);
     }
 }

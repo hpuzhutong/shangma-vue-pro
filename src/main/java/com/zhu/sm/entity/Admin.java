@@ -16,6 +16,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -63,6 +64,9 @@ public class Admin extends BaseEntity {
 
     @NotBlank(message = "地址不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private String adminAddress;
+
+
+    private transient List<Long> roleIds;
 
 
 }

@@ -3,6 +3,8 @@ package com.zhu.sm.dto;
 import com.zhu.sm.dto.base.BaseDTO;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @anthor: HandSome_ZTon
  * @date: 2021/6/24 13:00
@@ -35,5 +37,7 @@ public class AdminDTO extends BaseDTO {
     private Double adminSalary;
 
     private String adminAddress;
+
+    private List<Long> roleIds;
 
 }

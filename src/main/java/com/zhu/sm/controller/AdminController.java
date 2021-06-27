@@ -41,12 +41,6 @@ public class AdminController extends BaseController {
     private AdminService adminService;
 
     @Autowired
-    private AdminTransfer adminTransfer;
-
-    @Autowired
-    private UploadImgService uploadImgService;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("searchPage")
@@ -64,8 +58,8 @@ public class AdminController extends BaseController {
 
     @GetMapping("{id}")
     public AxiosResult<AdminDTO> findById(@PathVariable long id) {
-        Admin admin = adminService.findById(id);
-        return AxiosResult.success(adminTransfer.toDTO(admin));
+        AdminDTO adminDTO = adminService.getAdminAndRoleByAdminId(id);
+        return AxiosResult.success(adminDTO);
     }
 
     /**
@@ -89,8 +83,12 @@ public class AdminController extends BaseController {
             }
             String encode = bCryptPasswordEncoder.encode("123");
             admin.setAdminPassword(encode);
-            return toAxios(adminService.add(admin));
+
+//            return toAxios(adminService.add(admin));
+
+            return toAxios(adminService.addAdminAndAdminRole(admin));
         }
+
 //        int row = adminService.findByAccount(admin.getAdminAccount());
 //        if (row == 1) {
 //            return AxiosResult.error(AxiosStatus.ACCOUNT_USED_ERROR);
@@ -109,17 +107,25 @@ public class AdminController extends BaseController {
 
     @DeleteMapping("{id}")
     public AxiosResult<Void> deleteById(@PathVariable long id) {
-        return toAxios(adminService.deleteById(id));
+
+//        return toAxios(adminService.deleteById(id));
+
+        return toAxios(adminService.deleteAdminAndRoleByAdminId(id));
+
     }
 
     @DeleteMapping("batch/{ids}")
     public AxiosResult<Void> deleteById(@PathVariable List<Long> ids) {
-        return toAxios(adminService.batchDelByIds(ids));
+//        return toAxios(adminService.batchDelByIds(ids));
+
+        return toAxios(adminService.batchDeleteAdminAndRolesByAdminIds(ids));
     }
 
     @PutMapping
     public AxiosResult<Void> updateById(@Validated(UpdateGroup.class) @RequestBody Admin admin) {
-        return toAxios(adminService.update(admin));
+//        return toAxios(adminService.update(admin));
+
+        return toAxios(adminService.updateAdminAndRole(admin));
     }
 
     /**
@@ -142,7 +148,7 @@ public class AdminController extends BaseController {
             return AxiosResult.success(UploadUtils.uploadImg(filename, avatar.getInputStream()));
         }
 
-        //方式二
+        //方式二   异常抛出  拿到的是null
 //        return AxiosResult.success(uploadImgService.uploadImg(avatar));
     }
 }

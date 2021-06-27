@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 /**
  * @anthor: HandSome_ZTon
@@ -21,5 +23,5 @@ public class UploadProperties {
     private String accessKeySecret;
     private String bucket;
     private String url;
-    private String uploadImgExt;
+    private List<String> uploadImgExt;
 }

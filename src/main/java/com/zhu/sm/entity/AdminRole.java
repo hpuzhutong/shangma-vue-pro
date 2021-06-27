@@ -2,8 +2,10 @@ package com.zhu.sm.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.zhu.sm.entity.base.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -17,7 +19,9 @@ import java.io.Serializable;
  */
 @Data
 @TableName("t_admin_role")
-public class AdminRole extends BaseEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class AdminRole implements Serializable  {
 
 
     private Long roleId;
