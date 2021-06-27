@@ -1,7 +1,6 @@
 package com.zhu.sm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.PageInfo;
 import com.zhu.sm.common.page.PageBean;
 import com.zhu.sm.dto.BrandDTO;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,14 +53,12 @@ public class BrandServiceImpl extends BaseServiceImpl<Brand> implements BrandSer
             //品牌的入库时间要在表单传来的时间之内
             lqw.between(Brand::getCreateTime,brandQuery.getStartTime(),brandQuery.getEndTime());
         }
-
         //排序
         lqw.orderByDesc(Brand::getId);
         List<Brand> brands = brandMapper.selectList(lqw);
         PageInfo<Brand> pageInfo = new PageInfo<>(brands);
         //把几何中的brands转成brandDTO
         List<BrandDTO> brandDTOS = brandTransfer.toDTO(brands);
-
         return PageBean.iniData(pageInfo.getTotal(),brandDTOS);
     }
 }

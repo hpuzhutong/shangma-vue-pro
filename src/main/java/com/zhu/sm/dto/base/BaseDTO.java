@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 /*同意返回前段数据格式的基类*/
 @Data
 public class BaseDTO {
+
+
     private Long id;
 
     @JsonIgnore   //表示转json的时候忽略这个属性

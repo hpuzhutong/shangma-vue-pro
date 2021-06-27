@@ -14,7 +14,9 @@ import lombok.Getter;
 public enum  AxiosStatus {
     OK(2000,"操作成功"),
     ERROR(4000,"操作失败"),
-    FORM_VALID_ERROR(4001,"表单校验错误")
+    FORM_VALID_ERROR(4001,"表单校验错误"),
+    USED_HAS_EXIST(5001,"用户已存在"),
+    NOT_IMG(5002,"上传的不是图片"),
     ;
 
     private int status;

@@ -1,4 +1,4 @@
-package com.zhu.sm.util;
+package com.zhu.sm.common.util;
 
 /**
  * @anthor: HandSome_ZTon

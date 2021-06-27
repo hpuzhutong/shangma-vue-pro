@@ -12,3 +12,15 @@ spring:
     url: jdbc:mysql://localhost:3306/shangma?serverTimezone=Asia/Shanghai
     username: root
     password: 123
+  servlet:
+    multipart:
+      #      每个文件的配置最大为 50MB ，单次请求的文件的总数不能大于 500MB
+      max-file-size: 50MB
+      max-request-size: 500MB
+aliyun:
+  endPoint: https://oss-cn-beijing.aliyuncs.com
+  accessKeyId: LTAI5tKVVu8yPJbDBuNdk5bu
+  accessKeySecret: c1A1vBMmtdUBdcSDXMSO0dNOcvww6F
+  bucket: shangmasanshiqi
+  url: https://shangmasanshiqi.oss-cn-beijing.aliyuncs.com/
+  uploadImgExt: jip,png

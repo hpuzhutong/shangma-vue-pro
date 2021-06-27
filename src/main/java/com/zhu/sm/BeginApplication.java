@@ -20,3 +20,4 @@ public class BeginApplication {
         SpringApplication.run(BeginApplication.class);
     }
 }
+
