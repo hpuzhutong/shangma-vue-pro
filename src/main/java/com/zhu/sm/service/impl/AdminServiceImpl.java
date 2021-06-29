@@ -69,7 +69,7 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
         }
 
         //排序
-        lqw.orderByDesc(Admin::getId);
+//        lqw.orderByDesc(Admin::getId);
         List<Admin> admins = adminMapper.selectList(lqw);
         PageInfo<Admin> pageInfo = new PageInfo<>(admins);
         List<AdminDTO> adminDTOS = adminTransfer.toDTO(admins);
