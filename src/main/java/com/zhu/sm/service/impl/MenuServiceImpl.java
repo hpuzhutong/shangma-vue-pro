@@ -1,6 +1,5 @@
 package com.zhu.sm.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.zhu.sm.common.page.PageBean;
@@ -11,14 +10,13 @@ import com.zhu.sm.query.MenuQuery;
 import com.zhu.sm.service.MenuService;
 import com.zhu.sm.service.base.impl.BaseServiceImpl;
 import com.zhu.sm.transfer.MenuTransfer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +28,6 @@ import java.util.stream.Collectors;
 
 /*
     两个实体类的替换
-        b
  */
 
 @Service
@@ -78,7 +75,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
     }
 
 
-    //遞歸
+    //递归
     public void getChildren(MenuDTO menuDTO, List<MenuDTO> list) {
         List<MenuDTO> collect = list.stream().filter(menu1 -> menu1.getParentId().longValue() == menuDTO.getId()).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(collect)) {
