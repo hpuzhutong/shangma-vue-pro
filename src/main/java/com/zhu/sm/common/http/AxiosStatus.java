@@ -18,7 +18,8 @@ public enum  AxiosStatus {
     USED_HAS_EXIST(5001,"用户已存在"),
     NOT_IMG(5002,"上传的不是图片"),
     IMG_TYPE_ERROR(5003,"图片类型不符合PNG&JPEG"),
-    IMG_UPLOAD_ERROR(5004,"图片上传失败")
+    IMG_UPLOAD_ERROR(5004,"图片上传失败"),
+    MENU_VALID_ERROR(5005,"权限表单验证失败"),
     ;
 
     private int status;

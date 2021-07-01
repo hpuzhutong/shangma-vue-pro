@@ -53,4 +53,6 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     public int batchDelByIds(List<Long> ids) {
         return myMapper.deleteBatchIds(ids);
     }
+
+
 }

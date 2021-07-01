@@ -2,13 +2,18 @@ package com.zhu.sm.entity;
 
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.zhu.sm.common.util.anno.HandSomeTong;
+import com.zhu.sm.common.valid.group.*;
 import com.zhu.sm.entity.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author HandSome_tong
@@ -19,51 +24,33 @@ import lombok.EqualsAndHashCode;
 @TableName("t_menu")
 public class Menu extends BaseEntity {
 
-    /**
-     * 权限名称
-     */
+    @NotBlank(message = "权限标题不能为空", groups = {MenuGroup.class, DirectoryGroup.class})
     private String menuTitle;
 
-    /**
-     * 权限父亲id  如果是第一级 父id=0
-     */
+    @NotNull(message = "父级id不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Long parentId;
 
-    /**
-     * 1表示目录  2表示菜单  3表示按钮
-     */
+    @NotNull(message = "权限类型不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
+    @HandSomeTong(message = "权限类型不能为空", values = {1, 2, 3}, groups = {AddGroup.class, UpdateGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Integer menuType;
 
-    /**
-     * 权限排序
-     */
+    @NotNull(message = "权限排序不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Integer sort;
 
-    /**
-     * 路由地址
-     */
+    @NotBlank(message = "路由地址不能为空", groups = {MenuGroup.class, AddGroup.class})
     private String menuRouter;
 
-    /**
-     * 菜单图标
-     */
+    @NotBlank(message = "菜单图标不能为空", groups = {MenuGroup.class, DirectoryGroup.class})
     private String menuIcon;
 
-    /**
-     * 组件地址
-     */
+    @NotBlank(message = "组件地址不能为空", groups = {MenuGroup.class, AddGroup.class})
     private String componentPath;
 
-    /**
-     * 组件名称
-     */
+    @NotBlank(message = "组件名称不能为空", groups = {MenuGroup.class, AddGroup.class})
     private String componentName;
 
-    /**
-     * 权限标识
-     */
+    @NotBlank(message = "权限标识不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private String permSign;
-
 
 
 }

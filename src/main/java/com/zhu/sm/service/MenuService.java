@@ -8,6 +8,8 @@ import com.zhu.sm.service.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @anthor: HandSome_ZTon
  * @date: 2021/6/29 20:26
@@ -19,6 +21,8 @@ public interface MenuService extends BaseService<Menu> {
 
     PageBean<MenuDTO> searchPage(MenuQuery menuQuery);
 
+    List<MenuDTO> getTreeData();
 
+    int cascadeDeleteChildren(Long id);
 
 }

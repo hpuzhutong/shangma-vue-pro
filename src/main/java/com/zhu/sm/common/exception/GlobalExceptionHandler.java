@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @anthor: HandSome_ZTon
@@ -19,6 +20,27 @@ import java.util.List;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+//    @ExceptionHandler(ApiException.class)
+//    public AxiosResult<Void> handlerFormValidException(ApiException e){
+//        return AxiosResult.error(e.getAxiosStatus());
+//    }
+
+
+    @ExceptionHandler(Throwable.class)
+    public AxiosResult<Void> handlerThrowable(Throwable e){
+        AxiosStatus uploadError = AxiosStatus.MENU_VALID_ERROR;
+        uploadError.setMessage(e.getMessage());
+        return AxiosResult.error(uploadError);
+    }
+
+
+    @ExceptionHandler(FormValidException.class)
+    public AxiosResult<Map<String, String>> handlerFormValidException(FormValidException e){
+        AxiosStatus axiosStatus = e.getAxiosStatus();
+        return AxiosResult.error(axiosStatus,e.getMap());
+    }
+
 
     /**
      * 处理表单检验异常

@@ -1,5 +1,6 @@
 package com.zhu.sm.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zhu.sm.dto.base.BaseDTO;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ import java.util.List;
  */
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MenuDTO extends BaseDTO {
 
     private String menuTitle;
@@ -25,6 +27,7 @@ public class MenuDTO extends BaseDTO {
     private String componentName;
     private String permSign;
 
+    //只能叫children  否者相关工具类不能使用
     private List<MenuDTO> children;
 
 }

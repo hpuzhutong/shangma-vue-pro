@@ -1,9 +1,10 @@
 package com.zhu.sm.controller;
+
 import com.github.pagehelper.PageHelper;
 import com.zhu.sm.common.http.AxiosResult;
 import com.zhu.sm.common.page.PageBean;
-import com.zhu.sm.common.valid.group.AddGroup;
-import com.zhu.sm.common.valid.group.UpdateGroup;
+import com.zhu.sm.common.util.FormValidUtils;
+import com.zhu.sm.common.valid.group.*;
 import com.zhu.sm.controller.base.BaseController;
 import com.zhu.sm.dto.MenuDTO;
 import com.zhu.sm.entity.Menu;
@@ -34,8 +35,8 @@ public class MenuController extends BaseController {
     private MenuTransfer menuTransfer;
 
     @GetMapping("searchPage")
-    public AxiosResult<PageBean<MenuDTO>> searchPage(MenuQuery menuQuery){
-        PageHelper.startPage(menuQuery.getCurrentPage(),menuQuery.getPageSize());
+    public AxiosResult<PageBean<MenuDTO>> searchPage(MenuQuery menuQuery) {
+        PageHelper.startPage(menuQuery.getCurrentPage(), menuQuery.getPageSize());
         PageBean<MenuDTO> pageBean = menuService.searchPage(menuQuery);
         return AxiosResult.success(pageBean);
     }
@@ -52,23 +53,60 @@ public class MenuController extends BaseController {
     }
 
     @PostMapping
-    public AxiosResult addBrand(@Validated(AddGroup.class) @RequestBody Menu menu) {
+    public AxiosResult addMenu(@Validated({AddGroup.class}) @RequestBody Menu menu) {
+        Integer menuType = menu.getMenuType();
+        if (menuType == 1) {
+            //判断目录相关内容
+            FormValidUtils.valid(menu,DirectoryGroup.class);
+        }
+        if (menuType == 2) {
+            //判断菜单相关内容
+            FormValidUtils.valid(menu, MenuGroup.class);
+        }
+        if (menuType == 3) {
+            //判断按钮相关内容
+            FormValidUtils.valid(menu,BtnGroup.class);
+        }
         return toAxios(menuService.add(menu));
     }
 
+
+    /**
+     * 删除一个和级联删除
+     */
     @DeleteMapping("{id}")
     public AxiosResult<Void> deleteById(@PathVariable long id) {
-        return toAxios(menuService.deleteById(id));
+        int row = menuService.cascadeDeleteChildren(id);
+        return toAxios(row);
     }
 
-    @DeleteMapping("batch/{ids}")
-    public AxiosResult<Void> deleteById(@PathVariable List<Long> ids) {
-        return toAxios(menuService.batchDelByIds(ids));
-    }
 
     @PutMapping
-    public AxiosResult<Void> updateById(@Validated(UpdateGroup.class) @RequestBody Menu menu){
+    public AxiosResult<Void> updateById(@Validated(UpdateGroup.class) @RequestBody Menu menu) {
+        Integer menuType = menu.getMenuType();
+        if (menuType == 1) {
+            //判断目录相关内容
+            FormValidUtils.valid(menu,DirectoryGroup.class);
+        }
+        if (menuType == 2) {
+            //判断菜单相关内容
+            FormValidUtils.valid(menu, MenuGroup.class);
+        }
+        if (menuType == 3) {
+            //判断按钮相关内容
+            FormValidUtils.valid(menu,BtnGroup.class);
+        }
         return toAxios(menuService.update(menu));
+    }
+
+    /**
+     * 获得所有的权限
+     * 展示在select框中
+     */
+    @GetMapping("getTreeData")
+    public AxiosResult<List<MenuDTO>> getSelectTreeData() {
+        List<MenuDTO> list = menuService.getTreeData();
+        return AxiosResult.success(list);
     }
 
 
