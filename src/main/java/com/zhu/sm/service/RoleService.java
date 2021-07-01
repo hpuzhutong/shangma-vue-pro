@@ -9,6 +9,8 @@ import com.zhu.sm.query.BrandQuery;
 import com.zhu.sm.query.RoleQuery;
 import com.zhu.sm.service.base.BaseService;
 
+import java.util.List;
+
 
 /**
  * @anthor: HandSome_ZTon
@@ -22,4 +24,8 @@ public interface RoleService extends BaseService<Role> {
      * 条件分页查询
      */
     PageBean<RoleDTO> searchPage(RoleQuery roleQuery);
+
+    int setRoleMenu(Long roleId, List<Long> menuIds);
+
+    List<Long> getMenusByRoleId(Long roleId);
 }

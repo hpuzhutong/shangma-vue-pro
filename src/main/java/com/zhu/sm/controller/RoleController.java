@@ -39,8 +39,8 @@ public class RoleController extends BaseController {
     private RoleTransfer roleTransfer;
 
     @GetMapping("searchPage")
-    public AxiosResult<PageBean<RoleDTO>> searchPage(RoleQuery roleQuery){
-        PageHelper.startPage(roleQuery.getCurrentPage(),roleQuery.getPageSize());
+    public AxiosResult<PageBean<RoleDTO>> searchPage(RoleQuery roleQuery) {
+        PageHelper.startPage(roleQuery.getCurrentPage(), roleQuery.getPageSize());
         PageBean<RoleDTO> pageBean = roleService.searchPage(roleQuery);
         return AxiosResult.success(pageBean);
     }
@@ -76,8 +76,26 @@ public class RoleController extends BaseController {
     }
 
     @PutMapping
-    public AxiosResult<Void> updateById(@Validated(UpdateGroup.class) @RequestBody Role role){
+    public AxiosResult<Void> updateById(@Validated(UpdateGroup.class) @RequestBody Role role) {
         return toAxios(roleService.update(role));
+    }
+
+    /**
+     * 给角色赋予权限
+     */
+    @PostMapping("{roleId}/menu/{menuIds}")
+    public AxiosResult<Void> setRoleMenu(@PathVariable Long roleId, @PathVariable List<Long> menuIds) {
+        int row = roleService.setRoleMenu(roleId,menuIds);
+        return toAxios(row);
+    }
+
+    /**
+     * 获取角色的权限
+     */
+    @GetMapping("{roleId}/menu")
+    public AxiosResult<List<Long>> getMenusByRoleId(@PathVariable Long roleId){
+        List<Long> menuIds =  roleService.getMenusByRoleId(roleId);
+        return AxiosResult.success(menuIds);
     }
 
 

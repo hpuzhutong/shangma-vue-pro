@@ -112,11 +112,13 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
     @Override
     public int cascadeDeleteChildren(Long id) {
         //获取孩子
-        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().lambda().eq(Menu::getParentId, id));
+//        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().lambda().eq(Menu::getParentId, id));
         //删除孩子
         List<Long> ids = new ArrayList<>();
         getCascadeChildrenId(id, ids);
-        menuMapper.deleteBatchIds(ids);
+        if (ids.size()>0){
+            menuMapper.deleteBatchIds(ids);
+        }
         //删除自己
         return this.deleteById(id);
     }

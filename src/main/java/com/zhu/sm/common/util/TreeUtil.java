@@ -22,6 +22,13 @@ public class TreeUtil {
      * @param <T>
      */
     public static <T> void buildTreeData(List<T> root, List<T> allList) {
+        List<T> sortList = root.stream().sorted((t1, t2) -> {
+            Integer t1Sort = (Integer) ReflectionUtils.getFieldValue(t1, "sort");
+            Integer t2Sort = (Integer) ReflectionUtils.getFieldValue(t2, "sort");
+            return t1Sort - t2Sort;
+        }).collect(Collectors.toList());
+        root.clear();
+        root.addAll(sortList);
         root.forEach(t -> getChildren(t, allList));
     }
 
@@ -42,9 +49,14 @@ public class TreeUtil {
 
         //两中代码效果一致
         List<T> children = allList.stream().filter(t1 -> ((Long) ReflectionUtils.getFieldValue(t, "id")).equals((Long) ReflectionUtils.getFieldValue(t1, "parentId"))).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(children)){
-            ReflectionUtils.setFieldValue(t,"children",children);
-            children.forEach(t1 -> getChildren(t1,allList));
+        if (!CollectionUtils.isEmpty(children)) {
+            List<T> sortChildren = children.stream().sorted((t1, t2) -> {
+                Integer t1Sort = (Integer) ReflectionUtils.getFieldValue(t1, "sort");
+                Integer t2Sort = (Integer) ReflectionUtils.getFieldValue(t2, "sort");
+                return t1Sort - t2Sort;
+            }).collect(Collectors.toList());
+            ReflectionUtils.setFieldValue(t, "children", sortChildren);
+            children.forEach(t1 -> getChildren(t1, allList));
         }
 
     }

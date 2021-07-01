@@ -1,8 +1,10 @@
 package com.zhu.sm.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -17,6 +19,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_role_menu")
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoleMenu implements Serializable {
 
     private Long roleId;

@@ -1,14 +1,18 @@
 package com.zhu.sm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.zhu.sm.common.page.PageBean;
 import com.zhu.sm.dto.BrandDTO;
 import com.zhu.sm.dto.RoleDTO;
 import com.zhu.sm.entity.Brand;
 import com.zhu.sm.entity.Role;
+import com.zhu.sm.entity.RoleMenu;
 import com.zhu.sm.mapper.BrandMapper;
 import com.zhu.sm.mapper.RoleMapper;
+import com.zhu.sm.mapper.RoleMenuMapper;
 import com.zhu.sm.query.BrandQuery;
 import com.zhu.sm.query.RoleQuery;
 import com.zhu.sm.service.BrandService;
@@ -23,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @anthor: HandSome_ZTon
@@ -44,6 +49,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
     private RoleMapper roleMapper;
 
     @Autowired
+    private RoleMenuMapper roleMenuMapper;
+
+    @Autowired
     private RoleTransfer roleTransfer;
 
     @Override
@@ -62,5 +70,29 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
         //把几何中的brands转成brandDTO
         List<RoleDTO> roleDTOS = roleTransfer.toDTO(roles);
         return PageBean.iniData(pageInfo.getTotal(), roleDTOS);
+    }
+
+    /**
+     * 给角色设置权限
+     */
+    @Override
+    public int setRoleMenu(Long roleId, List<Long> menuIds) {
+        //删除已有的权限
+        roleMenuMapper.delete(new LambdaUpdateWrapper<RoleMenu>().eq(RoleMenu::getMenuId, roleId));
+        //添加权限
+        menuIds.forEach(menuId -> roleMenuMapper.insert(new RoleMenu(roleId, menuId)));
+        return 1;
+    }
+
+    /**
+     * 获取角色的权限
+     */
+    @Override
+    public List<Long> getMenusByRoleId(Long roleId) {
+        List<Long> collect = roleMenuMapper.selectList(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getMenuId, roleId))
+                .stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
+
+
+        return null;
     }
 }

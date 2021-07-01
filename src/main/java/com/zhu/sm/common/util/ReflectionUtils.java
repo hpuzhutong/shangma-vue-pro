@@ -41,7 +41,7 @@ public class ReflectionUtils {
         try {
             result = field.get(object);
         } catch (IllegalAccessException e) {
-            log.error("ReflectionUtils中获取属性值错误:");
+            log.error("ReflectionUtils中获取属性值错误");
         }
 
         return result;
@@ -66,7 +66,7 @@ public class ReflectionUtils {
         try {
             field.set(object, value);
         } catch (IllegalAccessException e) {
-            log.error("ReflectionUtils中设置属性值错误:");
+            log.error("ReflectionUtils中设置属性值错误");
         }
     }
 
@@ -128,7 +128,7 @@ public class ReflectionUtils {
                 return superClass.getDeclaredMethod(methodName, parameterTypes);
             } catch (NoSuchMethodException e) {
                 //Method 不在当前类定义, 继续向上转型
-                log.error("ReflectionUtils中获取方法值错误:");
+                log.error("ReflectionUtils中获取方法值错误");
             }
         }
 

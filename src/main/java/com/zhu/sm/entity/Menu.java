@@ -24,32 +24,34 @@ import javax.validation.constraints.NotNull;
 @TableName("t_menu")
 public class Menu extends BaseEntity {
 
-    @NotBlank(message = "权限标题不能为空", groups = {MenuGroup.class, DirectoryGroup.class})
-    private String menuTitle;
 
     @NotNull(message = "父级id不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Long parentId;
 
+    @NotBlank(message = "权限标题不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
+    private String menuTitle;
+
+
     @NotNull(message = "权限类型不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
-    @HandSomeTong(message = "权限类型不能为空", values = {1, 2, 3}, groups = {AddGroup.class, UpdateGroup.class, DirectoryGroup.class, BtnGroup.class})
+    @HandSomeTong(message = "权限类型不能为空", values = {1, 2, 3}, groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Integer menuType;
 
     @NotNull(message = "权限排序不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Integer sort;
 
-    @NotBlank(message = "路由地址不能为空", groups = {MenuGroup.class, AddGroup.class})
+    @NotBlank(message = "路由地址不能为空", groups = {MenuGroup.class,  DirectoryGroup.class})
     private String menuRouter;
 
     @NotBlank(message = "菜单图标不能为空", groups = {MenuGroup.class, DirectoryGroup.class})
     private String menuIcon;
 
-    @NotBlank(message = "组件地址不能为空", groups = {MenuGroup.class, AddGroup.class})
+    @NotBlank(message = "组件地址不能为空", groups = {MenuGroup.class})
     private String componentPath;
 
-    @NotBlank(message = "组件名称不能为空", groups = {MenuGroup.class, AddGroup.class})
+    @NotBlank(message = "组件名称不能为空", groups = {MenuGroup.class})
     private String componentName;
 
-    @NotBlank(message = "权限标识不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
+    @NotBlank(message = "权限标识不能为空", groups = {MenuGroup.class})
     private String permSign;
 
 
