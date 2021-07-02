@@ -13,6 +13,7 @@ import lombok.Data;
 
 @Data
 public class BrandDTO extends BaseDTO {
+
     private String brandName;
     private String brandSite;
     private String brandDesc;

@@ -17,27 +17,16 @@ import java.util.List;
 public class AdminDTO extends BaseDTO {
 
     private String adminAccount;
-
     private String adminName;
-
     private Integer gender;
-
     private String adminPhone;
-
     private String adminCode;
-
     private String adminEmail;
-
     private String adminAvatar;
-
     private Boolean isActive;
-
     private Boolean isAdmin;
-
     private Double adminSalary;
-
     private String adminAddress;
-
     private List<Long> roleIds;
 
 }

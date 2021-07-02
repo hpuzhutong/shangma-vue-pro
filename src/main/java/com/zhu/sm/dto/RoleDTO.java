@@ -14,9 +14,7 @@ import lombok.Data;
 @Data
 public class RoleDTO extends BaseDTO {
 
-
     private String roleName;
-
     private String roleDesc;
 
 }

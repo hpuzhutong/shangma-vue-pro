@@ -1,10 +1,10 @@
 package com.zhu.sm.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.github.pagehelper.PageHelper;
 import com.zhu.sm.common.http.AxiosResult;
 import com.zhu.sm.common.http.AxiosStatus;
 import com.zhu.sm.common.page.PageBean;
-import com.zhu.sm.common.util.UploadImgService;
 import com.zhu.sm.common.util.UploadUtils;
 import com.zhu.sm.common.valid.group.AddGroup;
 import com.zhu.sm.common.valid.group.UpdateGroup;
@@ -13,7 +13,6 @@ import com.zhu.sm.dto.AdminDTO;
 import com.zhu.sm.entity.Admin;
 import com.zhu.sm.query.AdminQuery;
 import com.zhu.sm.service.AdminService;
-import com.zhu.sm.transfer.AdminTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -21,9 +20,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.function.IntFunction;
 
@@ -150,5 +153,29 @@ public class AdminController extends BaseController {
 
         //方式二   异常抛出  拿到的是null
 //        return AxiosResult.success(uploadImgService.uploadImg(avatar));
+    }
+
+    /**
+     * 导出表格
+     */
+    @GetMapping("exportExcel")
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        List<Admin> list = adminService.findAll();
+        //将性别的 0 1 转换成 男 女
+        list.forEach(admin -> {
+            admin.setSex(admin.getGender()==0?"男":"女");
+            try {
+                admin.setUrl(new URL(admin.getAdminAvatar()));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        });
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        String fileName = URLEncoder.encode("员工信息表格", "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(), Admin.class).sheet("员工信息").doWrite(list);
     }
 }

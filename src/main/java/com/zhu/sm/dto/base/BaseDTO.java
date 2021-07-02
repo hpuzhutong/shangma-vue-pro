@@ -1,5 +1,7 @@
 package com.zhu.sm.dto.base;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -21,10 +23,13 @@ public class BaseDTO {
 
     @JsonIgnore   //表示转json的时候忽略这个属性
     private Long createBy;
+
     @JsonIgnore
     private Long updateBy;
+
     @JsonIgnore
     private LocalDateTime createTime;
+
     @JsonIgnore
     private LocalDateTime updateTime;
 

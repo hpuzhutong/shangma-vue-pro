@@ -1,5 +1,7 @@
 package com.zhu.sm.entity.base;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.zhu.sm.common.valid.group.AddGroup;
@@ -23,12 +25,21 @@ public class BaseEntity implements Serializable {
 
     @TableId(type = IdType.AUTO)
 
+    @ExcelProperty(value = "id",index = 0)
     @NotNull(message = "修改时id不能为空",groups = {UpdateGroup.class})
     @Null(message = "添加时id必须为空",groups = {AddGroup.class})
     private Long id;
+
+    @ExcelIgnore
     private Long createBy;
+
+    @ExcelIgnore
     private LocalDateTime createTime;
+
+    @ExcelIgnore
     private Long updateBy;
+
+    @ExcelIgnore
     private LocalDateTime updateTime;
 
 

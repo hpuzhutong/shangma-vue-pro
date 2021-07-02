@@ -26,7 +26,6 @@ public class MenuDTO extends BaseDTO {
     private String componentPath;
     private String componentName;
     private String permSign;
-
     //只能叫children  否者相关工具类不能使用
     private List<MenuDTO> children;
 

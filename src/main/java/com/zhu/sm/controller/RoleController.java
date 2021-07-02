@@ -7,13 +7,9 @@ import com.zhu.sm.common.valid.group.AddGroup;
 import com.zhu.sm.common.valid.group.UpdateGroup;
 import com.zhu.sm.controller.base.BaseController;
 import com.zhu.sm.dto.RoleDTO;
-import com.zhu.sm.entity.Brand;
 import com.zhu.sm.entity.Role;
-import com.zhu.sm.query.BrandQuery;
 import com.zhu.sm.query.RoleQuery;
-import com.zhu.sm.service.BrandService;
 import com.zhu.sm.service.RoleService;
-import com.zhu.sm.transfer.BrandTransfer;
 import com.zhu.sm.transfer.RoleTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -65,14 +61,22 @@ public class RoleController extends BaseController {
         return toAxios(roleService.add(role));
     }
 
+    /**
+     * 删除角色
+     */
     @DeleteMapping("{id}")
     public AxiosResult<Void> deleteById(@PathVariable long id) {
-        return toAxios(roleService.deleteById(id));
+        return toAxios(roleService.deleteCascade(id));
+//        return toAxios(roleService.deleteById(id));
     }
 
+    /**
+     * 批量删除角色 以及和角色相关的权限
+     */
     @DeleteMapping("batch/{ids}")
     public AxiosResult<Void> deleteById(@PathVariable List<Long> ids) {
-        return toAxios(roleService.batchDelByIds(ids));
+        return toAxios(roleService.batchDeleteCascade(ids));
+//        return toAxios(roleService.batchDelByIds(ids));
     }
 
     @PutMapping

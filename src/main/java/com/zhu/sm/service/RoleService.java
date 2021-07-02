@@ -28,4 +28,14 @@ public interface RoleService extends BaseService<Role> {
     int setRoleMenu(Long roleId, List<Long> menuIds);
 
     List<Long> getMenusByRoleId(Long roleId);
+
+    /**
+     * 删除角色和角色权限
+     */
+    int deleteCascade(long id);
+
+    /**
+     * 批量删除角色和角色权限
+     */
+    int batchDeleteCascade(List<Long> ids);
 }

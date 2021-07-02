@@ -17,6 +17,13 @@ spring:
       #      每个文件的配置最大为 50MB ，单次请求的文件的总数不能大于 500MB
       max-file-size: 50MB
       max-request-size: 500MB
+  #      邮件配置
+  mail:
+    username: lfox20_22@163.com
+    password: VKGHGACJBXFMURWZ
+    host: smtp.163.com
+
+
 aliyun:
   endPoint: https://oss-cn-beijing.aliyuncs.com
   accessKeyId: LTAI5tKVVu8yPJbDBuNdk5bu
