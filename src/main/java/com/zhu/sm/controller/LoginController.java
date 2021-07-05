@@ -3,6 +3,7 @@ package com.zhu.sm.controller;
 import com.wf.captcha.ArithmeticCaptcha;
 import com.zhu.sm.common.http.AxiosResult;
 import com.zhu.sm.common.http.AxiosStatus;
+import com.zhu.sm.common.util.TokenService;
 import com.zhu.sm.common.util.TreeUtil;
 import com.zhu.sm.dto.MenuDTO;
 import com.zhu.sm.entity.Admin;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,6 +57,9 @@ public class LoginController {
     @Autowired
     private MenuTransfer menuTransfer;
 
+    @Autowired
+    private TokenService tokenService;
+
 
     private static final String CODE_KEY = "code_key:";  //redis数据存起来的时候是按 文件夹存储分类的,文件夹名字是code_key:
 
@@ -71,7 +77,7 @@ public class LoginController {
     }
 
     @PostMapping("")
-    public AxiosResult<List<MenuDTO>> doLogin(@RequestBody Map<String, String> map) {
+    public AxiosResult<String> doLogin(@RequestBody Map<String, String> map) {
 
         String uuid = map.get("uuid");
         String code = map.get("code");
@@ -89,27 +95,8 @@ public class LoginController {
                 if (matches && isActive) {
                     //登录成功清除缓存数据
                     stringRedisTemplate.delete(CODE_KEY + uuid);
-                    //返回对应的权限菜单
-                    if (admin.getIsAdmin()) {
-                        //超级管理员
-                        List<Menu> all = menuService.findAll();
-                        List<MenuDTO> menuDTOS = menuTransfer.toDTO(all);
-                        List<MenuDTO> collect = menuDTOS.stream().filter(menuDTO -> !menuDTO.getMenuType().equals(3)).collect(Collectors.toList());
-                        List<MenuDTO> root = collect.stream().filter(menuDTO -> menuDTO.getParentId().equals(0L)).collect(Collectors.toList());
-                        TreeUtil.buildTreeData(root,collect);
-                        return AxiosResult.success(root);
-                    } else {
-                        //用户-》角色
-                        List<Long> roleIds = adminService.getRolesByAdminId(admin.getId());
-                        //角色-》权限
-                        List<MenuDTO> menuDTOS = roleService.getMenusByRoleIds(roleIds);
-                        //过滤掉按钮
-                        List<MenuDTO> collect = menuDTOS.stream().filter(menuDTO -> !menuDTO.getMenuType().equals(3)).collect(Collectors.toList());
-                        //封装到tree使之有层级关系
-                        List<MenuDTO> root = collect.stream().filter(menuDTO -> menuDTO.getParentId().equals(0L)).collect(Collectors.toList());
-                        TreeUtil.buildTreeData(root,collect);
-                        return AxiosResult.success(root);
-                    }
+                    String token = tokenService.createToken(admin.getId());
+                    return AxiosResult.success(token);
                 }
                 return AxiosResult.error(AxiosStatus.LOGIN_ERROR);
             }
@@ -119,8 +106,41 @@ public class LoginController {
 
     }
 
-
-
-
+    /**
+     * 获取用户的菜单列表权限
+     */
+    @GetMapping("getMenuList")
+    public AxiosResult<Map<String, Object>> getMenuList(HttpServletRequest httpServletRequest) {
+        String authentication = httpServletRequest.getHeader("Authentication");
+        //split空格的原因是在前端的baseaxios中加入了请求头Bearer+" " 以用来分割
+        String s = authentication.split(" ")[1];
+        Long adminId = tokenService.getAdminId(s);
+        Admin admin = adminService.findById(adminId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("admin",admin); //用户信息也返回前端
+        //返回对应的权限菜单
+        if (admin.getIsAdmin()) {
+            //超级管理员
+            List<Menu> all = menuService.findAll();
+            List<MenuDTO> menuDTOS = menuTransfer.toDTO(all);
+            List<MenuDTO> collect = menuDTOS.stream().filter(menuDTO -> !menuDTO.getMenuType().equals(3)).collect(Collectors.toList());
+            List<MenuDTO> root = collect.stream().filter(menuDTO -> menuDTO.getParentId().equals(0L)).collect(Collectors.toList());
+            TreeUtil.buildTreeData(root, collect);
+            map.put("menuList",root);
+            return AxiosResult.success(map);
+        } else {
+            //用户-》角色
+            List<Long> roleIds = adminService.getRolesByAdminId(admin.getId());
+            //角色-》权限
+            List<MenuDTO> menuDTOS = roleService.getMenusByRoleIds(roleIds);
+            //过滤掉按钮
+            List<MenuDTO> collect = menuDTOS.stream().filter(menuDTO -> !menuDTO.getMenuType().equals(3)).collect(Collectors.toList());
+            //封装到tree使之有层级关系
+            List<MenuDTO> root = collect.stream().filter(menuDTO -> menuDTO.getParentId().equals(0L)).collect(Collectors.toList());
+            TreeUtil.buildTreeData(root, collect);
+            map.put("menuList",root);
+            return AxiosResult.success(map);
+        }
+    }
 
 }

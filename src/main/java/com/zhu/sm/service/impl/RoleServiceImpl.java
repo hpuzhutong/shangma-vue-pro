@@ -85,7 +85,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
     @Override
     public int setRoleMenu(Long roleId, List<Long> menuIds) {
         //删除已有的权限
-        roleMenuMapper.delete(new LambdaUpdateWrapper<RoleMenu>().eq(RoleMenu::getMenuId, roleId));
+        roleMenuMapper.delete(new LambdaUpdateWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId));
         //添加权限
         menuIds.forEach(menuId -> roleMenuMapper.insert(new RoleMenu(roleId, menuId)));
         return 1;
