@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -76,7 +75,7 @@ public class LoginController {
         return AxiosResult.success(str);
     }
 
-    @PostMapping("")
+    @PostMapping("login")
     public AxiosResult<String> doLogin(@RequestBody Map<String, String> map) {
 
         String uuid = map.get("uuid");

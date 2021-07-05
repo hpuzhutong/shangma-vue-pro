@@ -21,10 +21,10 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(ApiException.class)
-//    public AxiosResult<Void> handlerFormValidException(ApiException e){
-//        return AxiosResult.error(e.getAxiosStatus());
-//    }
+    @ExceptionHandler(ApiException.class)
+    public AxiosResult<Void> handlerFormValidException(ApiException e){
+        return AxiosResult.error(e.getAxiosStatus());
+    }
 
 
     @ExceptionHandler(Throwable.class)

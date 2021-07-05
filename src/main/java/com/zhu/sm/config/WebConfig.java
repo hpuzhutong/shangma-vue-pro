@@ -1,9 +1,12 @@
 package com.zhu.sm.config;
 
+import com.zhu.sm.Interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -14,6 +17,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    /**
+     * 添加拦截的请求与不拦截的
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login/**");
+
+    }
 
     /**
      * 解决跨域问题
@@ -28,8 +46,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
+     * 加密码密对象放入容器
      *
-     *  加密码密对象放入容器
      * @return
      */
     @Bean

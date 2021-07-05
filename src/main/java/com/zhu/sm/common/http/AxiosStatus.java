@@ -22,6 +22,8 @@ public enum  AxiosStatus {
     MENU_VALID_ERROR(5005,"权限表单验证失败"),
     LOGIN_ERROR(5006,"登录失败"),
     LOGIN_SUCCESS(5007,"登录成功"),
+    NO_LOGIN(5008,"未登录"),
+
     ;
 
     private int status;

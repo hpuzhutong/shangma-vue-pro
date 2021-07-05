@@ -4,7 +4,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.zhu.sm.common.exception.ApiException;
+import com.zhu.sm.common.http.AxiosStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @anthor: HandSome_ZTon
@@ -53,5 +58,37 @@ public class TokenService {
         DecodedJWT decodedJWT = verifyToken(token);
         Long adminId = decodedJWT.getClaim("adminId").asLong();
         return adminId;
+    }
+
+    /**
+     * 检验前端传来的token时候符合要求
+     */
+    public boolean checkToken(HttpServletRequest httpServletRequest) {
+
+        String authentication = httpServletRequest.getHeader("Authentication");
+//        //没有传递token
+        if (StringUtils.isEmpty(authentication)) {
+            throw  new ApiException(AxiosStatus.NO_LOGIN);
+//            System.out.println("垃圾");
+        }
+        //token没有携带前缀
+        if (!authentication.startsWith("Bearer ")) {
+            throw  new ApiException(AxiosStatus.NO_LOGIN);
+//            System.out.println("垃圾0");
+        }
+        //检查其长度是不是2
+        String[] s = authentication.split(" ");
+        if (s.length != 2) {
+            throw  new ApiException(AxiosStatus.NO_LOGIN);
+//            System.out.println("垃圾1");
+        }
+        //token解析异常
+        try {
+            verifyToken(s[1]);
+        } catch (Exception e) {
+            throw  new ApiException(AxiosStatus.NO_LOGIN);
+//            System.out.println("垃圾2");
+        }
+        return true;
     }
 }

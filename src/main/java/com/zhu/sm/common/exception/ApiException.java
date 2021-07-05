@@ -1,5 +1,6 @@
 package com.zhu.sm.common.exception;
 
+
 import com.zhu.sm.common.http.AxiosStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ApiException extends RuntimeException{
+public class ApiException extends RuntimeException {
 
     private AxiosStatus axiosStatus;
 }
