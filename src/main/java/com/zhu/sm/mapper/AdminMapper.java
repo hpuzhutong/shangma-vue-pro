@@ -13,6 +13,4 @@ import com.zhu.sm.mapper.base.MyMapper;
 
 public interface AdminMapper extends MyMapper<Admin> {
 
-
-
 }

@@ -3,6 +3,7 @@ package com.zhu.sm;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -15,7 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @MapperScan(basePackages = {"com.zhu.sm.mapper"})
-@EnableScheduling
+@EnableScheduling  //开启任务调度  使用threadPoolTaskScheduler
+@EnableAsync  //开启异步操作
 public class BeginApplication {
 
     public static void main(String[] args) {

@@ -8,8 +8,10 @@ import com.zhu.sm.dto.AdminDTO;
 import com.zhu.sm.entity.Admin;
 import com.zhu.sm.entity.AdminRole;
 import com.zhu.sm.entity.Role;
+import com.zhu.sm.entity.RoleMenu;
 import com.zhu.sm.mapper.AdminMapper;
 import com.zhu.sm.mapper.AdminRoleMapper;
+import com.zhu.sm.mapper.RoleMenuMapper;
 import com.zhu.sm.query.AdminQuery;
 import com.zhu.sm.service.AdminService;
 import com.zhu.sm.service.base.impl.BaseServiceImpl;
@@ -48,6 +50,9 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
 
     @Autowired
     private AdminRoleMapper adminRoleMapper;
+
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
 
     @Override
     public PageBean<AdminDTO> searchPage(AdminQuery adminQuery) {
@@ -138,7 +143,33 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
     @Override
     public int batchDeleteAdminAndRolesByAdminIds(List<Long> ids) {
         //删除员工所有的信息以及角色
-        adminRoleMapper.delete(new QueryWrapper<AdminRole>().lambda().in(AdminRole::getAdminId,ids));
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().lambda().in(AdminRole::getAdminId, ids));
         return this.batchDelByIds(ids);
+    }
+
+    /**
+     * 使用帐户查询
+     *
+     * @param account
+     */
+    @Override
+    public Admin getAdminByAccount(String account) {
+        Admin admin = adminMapper.selectOne(new LambdaQueryWrapper<Admin>().eq(Admin::getAdminAccount, account));
+        return admin;
+    }
+
+    /**
+     * 通过id获得用户的所有角色
+     *
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Long> getRolesByAdminId(Long adminId) {
+        //那都所有的角色集合
+        List<AdminRole> adminRoles = adminRoleMapper.selectList(new LambdaQueryWrapper<AdminRole>().eq(AdminRole::getAdminId, adminId));
+        //通过role拿到权限
+        List<Long> collect = adminRoles.stream().map(AdminRole::getRoleId).collect(Collectors.toList());
+        return collect;
     }
 }

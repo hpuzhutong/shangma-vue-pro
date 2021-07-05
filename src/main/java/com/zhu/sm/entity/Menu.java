@@ -31,7 +31,6 @@ public class Menu extends BaseEntity {
     @NotBlank(message = "权限标题不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private String menuTitle;
 
-
     @NotNull(message = "权限类型不能为空", groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     @HandSomeTong(message = "权限类型不能为空", values = {1, 2, 3}, groups = {MenuGroup.class, DirectoryGroup.class, BtnGroup.class})
     private Integer menuType;

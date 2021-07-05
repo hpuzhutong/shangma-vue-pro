@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.zhu.sm.common.page.PageBean;
+import com.zhu.sm.dto.MenuDTO;
 import com.zhu.sm.dto.RoleDTO;
 import com.zhu.sm.entity.*;
 import com.zhu.sm.mapper.*;
 import com.zhu.sm.query.RoleQuery;
 import com.zhu.sm.service.RoleService;
 import com.zhu.sm.service.base.impl.BaseServiceImpl;
+import com.zhu.sm.transfer.MenuTransfer;
 import com.zhu.sm.transfer.RoleTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +57,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
     @Autowired
     private RoleTransfer roleTransfer;
+
+    @Autowired
+    private MenuTransfer menuTransfer;
 
     @Override
     public PageBean<RoleDTO> searchPage(RoleQuery roleQuery) {
@@ -123,7 +127,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
     @Override
     public int batchDeleteCascade(List<Long> ids) {
-        ids.forEach(id->{
+        ids.forEach(id -> {
             //删除员工和角色的中间表 和本角色相关的数据
             adminRoleMapper.delete(new LambdaUpdateWrapper<AdminRole>().eq(AdminRole::getRoleId, id));
             //删除角色和权限的中间表 和本角色相关的数据
@@ -133,4 +137,16 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
         return roleMapper.deleteBatchIds(ids);
     }
 
+
+    @Override
+    public List<MenuDTO> getMenusByRoleIds(List<Long> roleIds) {
+        if (!CollectionUtils.isEmpty(roleIds)) {
+            //拿到所有的权限
+            List<Long> menuIds = roleMenuMapper.selectList(new LambdaQueryWrapper<RoleMenu>().in(RoleMenu::getRoleId, roleIds)).stream().map(RoleMenu::getMenuId).distinct().collect(Collectors.toList());
+            List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>().in(Menu::getId, menuIds));
+            List<MenuDTO> menuDTOS = menuTransfer.toDTO(menus);
+            return menuDTOS;
+        }
+        return new ArrayList<>();
+    }
 }

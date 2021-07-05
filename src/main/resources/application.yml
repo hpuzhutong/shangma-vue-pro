@@ -6,12 +6,14 @@ logging:
     com:
       zhu:
         sm: debug
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shangma?serverTimezone=Asia/Shanghai
     username: root
     password: 123
+
   servlet:
     multipart:
       #      每个文件的配置最大为 50MB ，单次请求的文件的总数不能大于 500MB
@@ -19,9 +21,27 @@ spring:
       max-request-size: 500MB
   #      邮件配置
   mail:
-    username: lfox20_22@163.com
-    password: VKGHGACJBXFMURWZ
-    host: smtp.163.com
+    username: 2464821976@qq.com
+    password: icspbcqgvyfbdiie
+    host: smtp.qq.com
+  #设置spring自带异步线程池大小  50  ThreadPoolTaskExecutor
+  task:
+    execution:
+      pool:
+        core-size: 50
+    #设置 任务调度的线程池大小  50  ThreadPoolTaskScheduler
+    scheduling:
+      pool:
+        size: 50
+  # 设置redis连接池大小
+  redis:
+    lettuce:
+      pool:
+        max-active: 30
+        max-idle: 30
+        max-wait: 30
+    host: localhost
+    port: 6379
 
 
 aliyun:

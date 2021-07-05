@@ -1,10 +1,12 @@
 package com.zhu.sm.service.base.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zhu.sm.mapper.base.MyMapper;
 import com.zhu.sm.service.base.BaseService;
 import com.zhu.sm.common.util.ReflectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -52,6 +54,17 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     @Transactional
     public int batchDelByIds(List<Long> ids) {
         return myMapper.deleteBatchIds(ids);
+    }
+
+    @Override
+    public void getCascadeChildrenIds(Long id, List<Long> ids) {
+        List<T> ts = myMapper.selectList(new QueryWrapper<T>().eq("parent_id", id));
+        if (!CollectionUtils.isEmpty(ts)) {
+            ts.forEach(t -> {
+                ids.add((Long) ReflectionUtils.getFieldValue(t, "id"));
+                getCascadeChildrenIds((Long) ReflectionUtils.getFieldValue(t, "id"), ids);
+            });
+        }
     }
 
 

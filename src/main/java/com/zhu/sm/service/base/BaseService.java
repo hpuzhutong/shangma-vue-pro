@@ -43,6 +43,7 @@ public interface BaseService<T> {
     int batchDelByIds(List<Long> ids);
 
 
+    void getCascadeChildrenIds(Long id, List<Long> ids);
 
 
 }

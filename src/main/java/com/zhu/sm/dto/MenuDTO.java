@@ -15,6 +15,7 @@ import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+//@EqualsAndHashCode  //重写equals和hashcode 在登录的时候返回权限
 public class MenuDTO extends BaseDTO {
 
     private String menuTitle;

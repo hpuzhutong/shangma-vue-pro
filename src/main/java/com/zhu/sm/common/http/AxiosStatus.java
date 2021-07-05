@@ -20,6 +20,8 @@ public enum  AxiosStatus {
     IMG_TYPE_ERROR(5003,"图片类型不符合PNG&JPEG"),
     IMG_UPLOAD_ERROR(5004,"图片上传失败"),
     MENU_VALID_ERROR(5005,"权限表单验证失败"),
+    LOGIN_ERROR(5006,"登录失败"),
+    LOGIN_SUCCESS(5007,"登录成功"),
     ;
 
     private int status;

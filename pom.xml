@@ -94,7 +94,8 @@
         </dependency>
 
         <!--发邮件-->
-        <!-- VKGHGACJBXFMURWZ -->
+        <!-- VKGHGACJBXFMURWZ  163
+             icspbcqgvyfbdiie  qq  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
@@ -102,6 +103,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
+        <!--图形验证码-->
+        <!-- https://mvnrepository.com/artifact/com.github.whvcse/easy-captcha -->
+        <dependency>
+            <groupId>com.github.whvcse</groupId>
+            <artifactId>easy-captcha</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--外部连接池-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
 
 

@@ -67,4 +67,13 @@ public interface AdminService extends BaseService<Admin> {
      * @return
      */
     int batchDeleteAdminAndRolesByAdminIds(List<Long> ids);
+
+    Admin getAdminByAccount(String account);
+
+    /**
+     * 获得用户的所有角色
+     * @param adminId
+     * @return
+     */
+    List<Long> getRolesByAdminId(Long adminId);
 }
