@@ -3,27 +3,20 @@ package com.zhu.sm.entity;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.*;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.zhu.sm.common.util.anno.HandSomeTong;
 import com.zhu.sm.common.valid.group.AddGroup;
 import com.zhu.sm.common.valid.group.UpdateGroup;
 import com.zhu.sm.entity.base.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

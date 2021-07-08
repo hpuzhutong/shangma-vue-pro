@@ -24,7 +24,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         //放行所有的 OPTIONS 请求
-        if("OPTIONS".equals(request.getMethod().toUpperCase())) {
+        if("OPTIONS".equals(request.getMethod())) {
             return true;
         }
         //判断用户是否登录

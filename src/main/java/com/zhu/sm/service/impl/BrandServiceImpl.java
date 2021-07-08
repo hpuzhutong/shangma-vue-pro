@@ -43,6 +43,7 @@ public class BrandServiceImpl extends BaseServiceImpl<Brand> implements BrandSer
     @Override
     public PageBean<BrandDTO> searchPage(BrandQuery brandQuery) {
         LambdaQueryWrapper<Brand> lqw = new LambdaQueryWrapper<>();
+
         if (!StringUtils.isEmpty(brandQuery.getBrandName())) {
             lqw.like(Brand::getBrandName, brandQuery.getBrandName());
         }
@@ -56,9 +57,13 @@ public class BrandServiceImpl extends BaseServiceImpl<Brand> implements BrandSer
         //排序
         lqw.orderByDesc(Brand::getId);
         List<Brand> brands = brandMapper.selectList(lqw);
+        //进行分页
         PageInfo<Brand> pageInfo = new PageInfo<>(brands);
-        //把几何中的brands转成brandDTO
+        //把几何中的brands转成brandDTO  即返回给前端的数据（有选择性的）
         List<BrandDTO> brandDTOS = brandTransfer.toDTO(brands);
-        return PageBean.iniData(pageInfo.getTotal(),brandDTOS);
+
+        PageBean<BrandDTO> brandDTOPageBean = PageBean.iniData(pageInfo.getTotal(), brandDTOS);
+
+        return brandDTOPageBean;
     }
 }

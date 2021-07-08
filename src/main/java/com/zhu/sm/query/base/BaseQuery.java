@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class BaseQuery {
 
     private int currentPage = 1;
-    private int pageSize = 1;
+    private int pageSize = 8;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;

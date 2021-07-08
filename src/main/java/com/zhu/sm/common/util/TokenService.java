@@ -69,25 +69,21 @@ public class TokenService {
 //        //没有传递token
         if (StringUtils.isEmpty(authentication)) {
             throw  new ApiException(AxiosStatus.NO_LOGIN);
-//            System.out.println("垃圾");
         }
         //token没有携带前缀
         if (!authentication.startsWith("Bearer ")) {
             throw  new ApiException(AxiosStatus.NO_LOGIN);
-//            System.out.println("垃圾0");
         }
         //检查其长度是不是2
         String[] s = authentication.split(" ");
         if (s.length != 2) {
             throw  new ApiException(AxiosStatus.NO_LOGIN);
-//            System.out.println("垃圾1");
         }
         //token解析异常
         try {
             verifyToken(s[1]);
         } catch (Exception e) {
             throw  new ApiException(AxiosStatus.NO_LOGIN);
-//            System.out.println("垃圾2");
         }
         return true;
     }

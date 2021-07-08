@@ -1,5 +1,6 @@
 package com.zhu.sm.common.page;
 
+import com.zhu.sm.dto.BrandDTO;
 import lombok.Data;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PageBean<T> {
         this.total = total;
         this.data = data;
     }
+
 
     public static <T> PageBean<T> iniData(long total, List<T> data) {
         return new PageBean<T>(total, data);

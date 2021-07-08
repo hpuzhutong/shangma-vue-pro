@@ -14,6 +14,8 @@ import com.zhu.sm.entity.Admin;
 import com.zhu.sm.query.AdminQuery;
 import com.zhu.sm.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -23,12 +25,14 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.function.IntFunction;
 
 /**
  * @anthor: HandSome_ZTon
@@ -75,9 +79,9 @@ public class AdminController extends BaseController {
     public AxiosResult addAdmin(@Validated(AddGroup.class) @RequestBody Admin admin) {
         //判断用户名 邮箱  手机号 身份证号时候存在    及用户是否存在
         boolean row = adminService.hasAccountEmailPhone(admin);
-        if (row){
+        if (row) {
             return AxiosResult.error(AxiosStatus.USED_HAS_EXIST);
-        }else{
+        } else {
             if (admin.getIsActive() == null) {
                 admin.setIsActive(false);
             }
@@ -145,7 +149,7 @@ public class AdminController extends BaseController {
         BufferedImage read = ImageIO.read(avatar.getInputStream());
         if (read == null) {
             return AxiosResult.error(AxiosStatus.NOT_IMG);
-        }else{
+        } else {
             //重命名
             String filename = System.nanoTime() + "." + StringUtils.getFilenameExtension(avatar.getSubmittedFileName());
             return AxiosResult.success(UploadUtils.uploadImg(filename, avatar.getInputStream()));
@@ -163,7 +167,7 @@ public class AdminController extends BaseController {
         List<Admin> list = adminService.findAll();
         //将性别的 0 1 转换成 男 女
         list.forEach(admin -> {
-            admin.setSex(admin.getGender()==0?"男":"女");
+            admin.setSex(admin.getGender() == 0 ? "男" : "女");
             try {
                 admin.setUrl(new URL(admin.getAdminAvatar()));
             } catch (MalformedURLException e) {
@@ -178,4 +182,6 @@ public class AdminController extends BaseController {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
         EasyExcel.write(response.getOutputStream(), Admin.class).sheet("员工信息").doWrite(list);
     }
+
+
 }

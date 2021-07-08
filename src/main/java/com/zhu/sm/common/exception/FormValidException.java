@@ -18,7 +18,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class FormValidException extends RuntimeException {
 
-
     private AxiosStatus axiosStatus;
 
     private Map<String, String> map;
